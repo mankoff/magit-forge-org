@@ -7,5 +7,36 @@
 
 Edit Magit Forge issues with Org Mode
 
+Desired behavior:
++ New posts are in =(org-mode)=
++ Submit no longer =C-c C-c=, but instead =C-u C-c C-c=
++ On submit, export to markdown, and submit that
+
 * Implementation
+
++ With help from:  https://www.reddit.com/r/emacs/comments/13ws42w/how_can_i_edit_magit_forge_issue_comments_in_org/
+
+#+BEGIN_SRC emacs-lisp :results none
+(defun my/forge-submit-from-org nil
+  (interactive)
+  (if (equal current-prefix-arg nil)
+      (org-ctrl-c-ctrl-c)
+    (progn
+      (org-export-to-buffer 'gfm (buffer-name))
+      (forge-post-submit))))
+    
+(defun my/forge-create-post-mode nil
+  (interactive)
+  (use-local-map (copy-keymap org-mode-map))
+  (local-set-key (kbd "C-c C-c") 'my/forge-submit-from-org))
+
+(define-derived-mode forge-post-mode org-mode "Forge-Post" "")
+(advice-add 'forge-create-post :after #'my/forge-create-post-mode)
+;; (advice-remove 'forge-create-post #'my/forge-create-post-mode)
+
+;; (advice-add 'forge-edit-post :after #'my/forge-create-post-mode)
+;; need to take buffer, convert gfm to Org.
+
+#+END_SRC
+
 
