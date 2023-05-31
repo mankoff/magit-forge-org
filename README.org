@@ -1,0 +1,11 @@
+
+* Table of contents                               :toc_2:noexport:
+- [[#summary][Summary]]
+- [[#implementation][Implementation]]
+
+* Summary
+
+Edit Magit Forge issues with Org Mode
+
+* Implementation
+
